@@ -51,6 +51,7 @@ class MyHomePage extends StatelessWidget {
 
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center, // This centers the children inside the Column along its main (vertical) axis.
         children: [
           Text('A random unbelievable idea:'),
           BigCard(pair: pair),
@@ -76,19 +77,20 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = Theme.of(context);  // requests the app's current theme.
     final style = theme.textTheme.displayMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
 
     return Card(
-      color: theme.colorScheme.primary,
+      color: theme.colorScheme.primary, // use the app's Theme to choose the color.
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Text(
           pair.asLowerCase, 
-          style: style,
-          semanticsLabel: '${pair.first} ${pair.second}',),
+          style: style,  // to fix the text is too small and its color is hard to read.
+          semanticsLabel: '${pair.first} ${pair.second}', // Now, screen readers correctly pronounce each generated word pair
+          ),
       ),
     );
   }
