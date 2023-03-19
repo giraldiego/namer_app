@@ -40,6 +40,17 @@ class MyAppState extends ChangeNotifier {
     current = WordPair.random(); // generate a new random pair
     notifyListeners(); // ensures that anyone watching MyAppState is notified.
   }
+
+  var favorites = <WordPair>[];
+  void toggleFavorite() {
+    if (favorites.contains(current)) {
+      favorites.remove(current);
+    } else {
+      favorites.add(current);
+    }
+    notifyListeners();
+  }
+
 }
 
 class MyHomePage extends StatelessWidget {
