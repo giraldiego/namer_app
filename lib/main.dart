@@ -50,7 +50,6 @@ class MyAppState extends ChangeNotifier {
     }
     notifyListeners();
   }
-
 }
 
 class MyHomePage extends StatelessWidget {
@@ -59,34 +58,32 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
-    var favIcon = Icon(
-      Icons.favorite,
-      color: Colors.pink,
-      size: 24.0,
-      semanticLabel: 'Like wordpair',
-    );
-    var favIconBorder = Icon(
-      Icons.favorite_border,
-      color: Colors.white,
-      size: 24.0,
-      semanticLabel: 'Like wordpair',
-    );
+
+    // choose the appropriate icon depending on whether the current word pair is already in favorites.
+    IconData icon;
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;
+    } else {
+      icon = Icons.favorite_border;
+    }
 
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center, // This centers the children inside the Column along its main (vertical) axis.
+          mainAxisAlignment: MainAxisAlignment
+              .center, // This centers the children inside the Column along its main (vertical) axis.
           children: [
             BigCard(pair: pair),
             SizedBox(height: 10),
             Row(
-              mainAxisSize: MainAxisSize.min,   // This tells Row not to take all available horizontal space.
+              mainAxisSize: MainAxisSize
+                  .min, // This tells Row not to take all available horizontal space.
               children: [
                 ElevatedButton.icon(
                   onPressed: () {
                     appState.toggleFavorite();
                   },
-                  icon: appState.favorites.contains(pair) ? favIcon : favIconBorder,
+                  icon: Icon(icon),
                   label: Text('Like'),
                 ),
                 ElevatedButton(
@@ -114,20 +111,23 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);  // requests the app's current theme.
+    final theme = Theme.of(context); // requests the app's current theme.
     final style = theme.textTheme.displayMedium!.copyWith(
       color: theme.colorScheme.onPrimary,
     );
 
     return Card(
-      color: theme.colorScheme.primary, // use the app's Theme to choose the color.
+      color:
+          theme.colorScheme.primary, // use the app's Theme to choose the color.
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Text(
-          pair.asLowerCase, 
-          style: style,  // to fix the text is too small and its color is hard to read.
-          semanticsLabel: '${pair.first} ${pair.second}', // Now, screen readers correctly pronounce each generated word pair
-          ),
+          pair.asLowerCase,
+          style:
+              style, // to fix the text is too small and its color is hard to read.
+          semanticsLabel:
+              '${pair.first} ${pair.second}', // Now, screen readers correctly pronounce each generated word pair
+        ),
       ),
     );
   }
