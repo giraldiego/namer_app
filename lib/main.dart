@@ -3,10 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(MyApp()); // tells Flutter to run the app defined in MyApp.
 }
 
+/*
+The code in MyApp sets up the whole app. 
+It creates the app-wide state, names the app, 
+defines the visual theme, and sets the "home" 
+widget—the starting point of your app.
+*/
 class MyApp extends StatelessWidget {
+  // MyApp is a Widget
   const MyApp({super.key});
 
   @override
@@ -26,10 +33,17 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
+  // This class defines de app's state
   var current = WordPair.random();
+
+  void getNext() {
+    current = WordPair.random(); // generate a new random pair
+    notifyListeners(); // ensures that anyone watching MyAppState is notified.
+  }
 }
 
 class MyHomePage extends StatelessWidget {
+  // This is the widget set as home in myApp
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
@@ -39,10 +53,9 @@ class MyHomePage extends StatelessWidget {
         children: [
           Text('A random unbelievable idea:'),
           Text(appState.current.asLowerCase),
-
           ElevatedButton(
             onPressed: () {
-              print('button pressed');
+              appState.getNext();
             },
             child: Text('Next'),
           ),
