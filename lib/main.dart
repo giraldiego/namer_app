@@ -59,6 +59,18 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
+    var favIcon = Icon(
+      Icons.favorite,
+      color: Colors.pink,
+      size: 24.0,
+      semanticLabel: 'Like wordpair',
+    );
+    var favIconBorder = Icon(
+      Icons.favorite_border,
+      color: Colors.white,
+      size: 24.0,
+      semanticLabel: 'Like wordpair',
+    );
 
     return Scaffold(
       body: Center(
@@ -67,11 +79,23 @@ class MyHomePage extends StatelessWidget {
           children: [
             BigCard(pair: pair),
             SizedBox(height: 10),
-            ElevatedButton(
-              onPressed: () {
-                appState.getNext();
-              },
-              child: Text('Next'),
+            Row(
+              mainAxisSize: MainAxisSize.min,   // This tells Row not to take all available horizontal space.
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    appState.toggleFavorite();
+                  },
+                  icon: appState.favorites.contains(pair) ? favIcon : favIconBorder,
+                  label: Text('Like'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    appState.getNext();
+                  },
+                  child: Text('Next'),
+                ),
+              ],
             ),
           ],
         ),
