@@ -64,50 +64,62 @@ class _MyHomePageState extends State<MyHomePage> {
     Widget page;
     switch (selectedIndex) {
       case 0:
-      page = GeneratorPage();
-      break;
+        page = GeneratorPage();
+        break;
       case 1:
-      page = Placeholder();
-      break;
+        page = FavoritesPage();
+        break;
       default:
-      throw UnimplementedError('no widget for $selectedIndex');
+        throw UnimplementedError('no widget for $selectedIndex');
     }
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Scaffold(
-          body: Row(
-            children: [
-              SafeArea(
-                child: NavigationRail(
-                  extended: constraints.maxWidth >= 600,
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: Icon(Icons.home),
-                      label: Text('Home'),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.favorite),
-                      label: Text('Favorites'),
-                    ),
-                  ],
-                  selectedIndex: selectedIndex,
-                  onDestinationSelected: (value) {
-                    setState(() {
-                      selectedIndex = value;
-                    });
-                  },
-                ),
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        body: Row(
+          children: [
+            SafeArea(
+              child: NavigationRail(
+                extended: constraints.maxWidth >= 600,
+                destinations: [
+                  NavigationRailDestination(
+                    icon: Icon(Icons.home),
+                    label: Text('Home'),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.favorite),
+                    label: Text('Favorites'),
+                  ),
+                ],
+                selectedIndex: selectedIndex,
+                onDestinationSelected: (value) {
+                  setState(() {
+                    selectedIndex = value;
+                  });
+                },
               ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: page,
-                ),
+            ),
+            Expanded(
+              child: Container(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                child: page,
               ),
-            ],
-          ),
-        );
-      }
+            ),
+          ],
+        ),
+      );
+    });
+  }
+}
+
+class FavoritesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var appState = context.watch<MyAppState>();
+    var favorites = appState.favorites;
+    return Column(
+      children: [
+        Text('Messages:'),
+        for (var fav in favorites) Text(fav.asCamelCase),
+      ],
     );
   }
 }
@@ -129,14 +141,14 @@ class GeneratorPage extends StatelessWidget {
 
     return Center(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment
-              .center, // This centers the children inside the Column along its main (vertical) axis.
+        mainAxisAlignment: MainAxisAlignment
+            .center, // This centers the children inside the Column along its main (vertical) axis.
         children: [
           BigCard(pair: pair),
           SizedBox(height: 10),
           Row(
-              mainAxisSize: MainAxisSize
-                  .min, // This tells Row not to take all available horizontal space.
+            mainAxisSize: MainAxisSize
+                .min, // This tells Row not to take all available horizontal space.
             children: [
               ElevatedButton.icon(
                 onPressed: () {
@@ -157,7 +169,6 @@ class GeneratorPage extends StatelessWidget {
         ],
       ),
     );
-
   }
 }
 
